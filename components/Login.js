@@ -1,4 +1,6 @@
 import React from 'react';
+import { AnonymousCredential } from 'mongodb-stitch-react-native-sdk';
+
 import {
   View,
   Text,
@@ -7,12 +9,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const Login = () => {
+const Login = (props) => {
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const title = 'Waterly';
   const usernameLabel = 'Username: ';
   const passwordLabel = 'Password: ';
+
+  const onPressLogin = () => {
+    props.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+        props.setCurrentUserId(user.id)
+    }).catch(err => {
+        console.log(`Failed to log in anonymously: ${err}`);
+        props.setCurrentUserId(undefined);
+    });
+  };
 
   return (
     <View style={styles.login}>
@@ -33,22 +44,31 @@ const Login = () => {
           style={styles.input}
         />
       </View>
-      <TouchableOpacity onPress={this.handlePress} style={styles.btnHolder}>
+      <TouchableOpacity onPress={() => {onPressLogin()}} style={styles.btnHolder}>
         <Text style={styles.btn}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={this.handlePress} style={styles.linkHolder}>
+      <TouchableOpacity style={styles.linkHolder}>
         <Text style={styles.signup}>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={this.handlePress} style={styles.linkHolder}>
+      <TouchableOpacity style={styles.linkHolder}>
         <Text style={styles.signup}>Click to Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
+
+  // _onPressLogout() {
+  //   this.state.client.auth.logout().then(user => {
+  //       console.log(`Successfully logged out`);
+  //       this.setState({ currentUserId: undefined })
+  //   }).catch(err => {
+  //       console.log(`Failed to log out: ${err}`);
+  //       this.setState({ currentUserId: undefined })
+  //   });
+  // }
+
 };
 
-const handlePress = () => {
-  // currently a placeholder
-};
+
 
 const styles = StyleSheet.create({
   title: {
