@@ -4,7 +4,7 @@ import {v4 as uuid} from 'uuid';
 
 import ListItem from './ListItem';
 
-const Home = ({title}) => {
+const Home = () => {
   const [items, setItems] = useState([
     {
       id: uuid(),
