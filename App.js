@@ -1,13 +1,20 @@
 // "context" docs for passing props through stack.screen
 //https://reactjs.org/docs/context.html
-
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 import { Stitch } from 'mongodb-stitch-react-native-sdk';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Home from './components/Home';
 import Login from './components/Login';
+import SignUp from './components/SignUp';
+
+const Stack = createStackNavigator();
 
 export default class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state={
@@ -47,10 +54,13 @@ export default class App extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}> {loginStatus} </Text>
-        <Login client={this.state.client} setCurrentUserId={this.setCurrentUserId}/>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Home" component={Home} />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }

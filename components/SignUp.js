@@ -73,7 +73,11 @@ const SignUp = (props) => {
         <Text style={styles.btn}>Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup}>Or login?</Text>
+        <Text 
+          style={styles.signup} 
+          onPress={() => props.navigation.navigate('Login')}>
+            Or login?
+        </Text>
       </TouchableOpacity>
     </View>
   );

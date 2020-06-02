@@ -1,6 +1,5 @@
 import React from 'react';
 import { UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
-
 import {
   View,
   Text,
@@ -50,7 +49,9 @@ const Login = (props) => {
         <Text style={styles.signup}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup}>Click to Sign Up</Text>
+        <Text style={styles.signup} onPress={() =>
+          props.navigation.navigate('SignUp')
+        }>Click to Sign Up</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,7 +65,6 @@ const Login = (props) => {
   //       this.setState({ currentUserId: undefined })
   //   });
   // }
-
 };
 
 const styles = StyleSheet.create({
