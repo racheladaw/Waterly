@@ -1,16 +1,11 @@
-
-// mongodb stitch sdk reference for setting up client connection with db
-//https://docs.mongodb.com/stitch-sdks/js-react-native/4/index.html
-
 // "context" docs for passing props through stack.screen
 //https://reactjs.org/docs/context.html
 
 import React from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native';
-import { Stitch, AnonymousCredential } from 'mongodb-stitch-react-native-sdk';
+import { StyleSheet, Text, View } from 'react-native';
+import { Stitch } from 'mongodb-stitch-react-native-sdk';
 
 import Login from './components/Login';
-import Home from './components/Home';
 
 export default class App extends React.Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserPasswordCredential } from 'mongodb-stitch-react-native-sdk';
+import { UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
 
 import {
   View,
@@ -9,24 +9,42 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const Login = (props) => {
+const SignUp = (props) => {
+  const [name, onChangeName] = React.useState('');
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
+  const [confirmPassword, onChangeConfirmPassword] = React.useState('');
   const title = 'Waterly';
+  const nameLabel = 'Name: ';
   const emailLabel = 'Email: ';
   const passwordLabel = 'Password: ';
+  const confirmLabel = 'Confirm Password: ';
 
-  const onPressLogin = () => {
-    const credential = new UserPasswordCredential(email, password)
-      props.client.auth.loginWithCredential(credential)
-      // Returns a promise that resolves to the authenticated user
-      .then(authedUser => console.log(`successfully logged in with id: ${authedUser.id}`))
-      .catch(err => console.error(`login failed with error: ${err}`))
+  const onPressSignUp = () => {
+    const emailPasswordClient = props.client.auth
+        .getProviderClient(UserPasswordAuthProviderClient.factory);
+
+    if(password === confirmPassword) {
+        emailPasswordClient.registerWithEmail(email, password)
+            .then(() => console.log("Successfully sent account confirmation email!"))
+            .catch(err => console.error("Error registering new user:", err));
+    }
+    else {
+        console.log("Passwords do not match! Try again");
+    }
   };
 
   return (
     <View style={styles.login}>
       <Text style={styles.title}> {title} </Text>
+      <View style={styles.formRow}>
+        <Text style={styles.label}> {nameLabel} </Text>
+        <TextInput
+          onChangeText={text => onChangeName(text)}
+          value={name}
+          style={styles.input}
+        />
+      </View>
       <View style={styles.formRow}>
         <Text style={styles.label}> {emailLabel} </Text>
         <TextInput
@@ -43,28 +61,22 @@ const Login = (props) => {
           style={styles.input}
         />
       </View>
-      <TouchableOpacity onPress={() => {onPressLogin()}} style={styles.btnHolder}>
-        <Text style={styles.btn}>Login</Text>
+      <View style={styles.formRow}>
+        <Text style={styles.label}> {confirmLabel} </Text>
+        <TextInput
+          onChangeText={text => onChangeConfirmPassword(text)}
+          value={confirmPassword}
+          style={styles.input}
+        />
+      </View>
+      <TouchableOpacity onPress={() => {onPressSignUp()}} style={styles.btnHolder}>
+        <Text style={styles.btn}>Sign Up</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup}>Click to Sign Up</Text>
+        <Text style={styles.signup}>Or login?</Text>
       </TouchableOpacity>
     </View>
   );
-
-  // _onPressLogout() {
-  //   this.state.client.auth.logout().then(user => {
-  //       console.log(`Successfully logged out`);
-  //       this.setState({ currentUserId: undefined })
-  //   }).catch(err => {
-  //       console.log(`Failed to log out: ${err}`);
-  //       this.setState({ currentUserId: undefined })
-  //   });
-  // }
-
 };
 
 const styles = StyleSheet.create({
@@ -124,4 +136,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SignUp;
