@@ -1,6 +1,5 @@
 import React from 'react';
 import { UserPasswordAuthProviderClient } from 'mongodb-stitch-react-native-sdk';
-
 import {
   View,
   Text,
@@ -8,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+
+import { StateContext } from './StateProvider';
 
 const SignUp = (props) => {
   const [name, onChangeName] = React.useState('');
@@ -20,8 +21,8 @@ const SignUp = (props) => {
   const passwordLabel = 'Password: ';
   const confirmLabel = 'Confirm Password: ';
 
-  const onPressSignUp = () => {
-    const emailPasswordClient = props.client.auth
+  const onPressSignUp = (client) => {
+    const emailPasswordClient = client.auth
         .getProviderClient(UserPasswordAuthProviderClient.factory);
 
     if(password === confirmPassword) {
@@ -35,51 +36,55 @@ const SignUp = (props) => {
   };
 
   return (
-    <View style={styles.login}>
-      <Text style={styles.title}> {title} </Text>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {nameLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangeName(text)}
-          value={name}
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {emailLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangeEmail(text)}
-          value={email}
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {passwordLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangePassword(text)}
-          value={password}
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {confirmLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangeConfirmPassword(text)}
-          value={confirmPassword}
-          style={styles.input}
-        />
-      </View>
-      <TouchableOpacity onPress={() => {onPressSignUp()}} style={styles.btnHolder}>
-        <Text style={styles.btn}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.linkHolder}>
-        <Text 
-          style={styles.signup} 
-          onPress={() => props.navigation.navigate('Login')}>
-            Or login?
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <StateContext.Consumer>
+      {(context) => (
+        <View style={styles.login}>
+          <Text style={styles.title}> {title} </Text>
+          <View style={styles.formRow}>
+            <Text style={styles.label}> {nameLabel} </Text>
+            <TextInput
+              onChangeText={text => onChangeName(text)}
+              value={name}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.formRow}>
+            <Text style={styles.label}> {emailLabel} </Text>
+            <TextInput
+              onChangeText={text => onChangeEmail(text)}
+              value={email}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.formRow}>
+            <Text style={styles.label}> {passwordLabel} </Text>
+            <TextInput
+              onChangeText={text => onChangePassword(text)}
+              value={password}
+              style={styles.input}
+            />
+          </View>
+          <View style={styles.formRow}>
+            <Text style={styles.label}> {confirmLabel} </Text>
+            <TextInput
+              onChangeText={text => onChangeConfirmPassword(text)}
+              value={confirmPassword}
+              style={styles.input}
+            />
+          </View>
+          <TouchableOpacity onPress={() => {onPressSignUp(context.state.client)}} style={styles.btnHolder}>
+            <Text style={styles.btn}>Sign Up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.linkHolder}>
+            <Text 
+              style={styles.signup} 
+              onPress={() => props.navigation.navigate('Login')}>
+                Or login?
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </StateContext.Consumer>
   );
 };
 

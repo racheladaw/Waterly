@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { StateContext } from './StateProvider';
+
 const Login = (props) => {
   const [email, onChangeEmail] = React.useState('');
   const [password, onChangePassword] = React.useState('');
@@ -15,45 +17,51 @@ const Login = (props) => {
   const emailLabel = 'Email: ';
   const passwordLabel = 'Password: ';
 
-  const onPressLogin = () => {
+  const onPressLogin = (client) => {
     const credential = new UserPasswordCredential(email, password)
-      props.client.auth.loginWithCredential(credential)
+      client.auth.loginWithCredential(credential)
       // Returns a promise that resolves to the authenticated user
       .then(authedUser => console.log(`successfully logged in with id: ${authedUser.id}`))
       .catch(err => console.error(`login failed with error: ${err}`))
   };
 
   return (
-    <View style={styles.login}>
-      <Text style={styles.title}> {title} </Text>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {emailLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangeEmail(text)}
-          value={email}
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.formRow}>
-        <Text style={styles.label}> {passwordLabel} </Text>
-        <TextInput
-          onChangeText={text => onChangePassword(text)}
-          value={password}
-          style={styles.input}
-        />
-      </View>
-      <TouchableOpacity onPress={() => {onPressLogin()}} style={styles.btnHolder}>
+    <StateContext.Consumer>
+    {(context) => (  
+      <View style={styles.login}>
+          <Text style={styles.title}> {title} </Text>
+        <View style={styles.formRow}>
+          <Text style={styles.label}> {emailLabel} </Text>
+          <TextInput
+            onChangeText={text => onChangeEmail(text)}
+            value={email}
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.formRow}>
+          <Text style={styles.label}> {passwordLabel} </Text>
+          <TextInput
+            onChangeText={text => onChangePassword(text)}
+            value={password}
+            style={styles.input}
+          />
+        </View>
+        <TouchableOpacity onPress={() => {onPressLogin(context.state.client)}} style={styles.btnHolder}>
         <Text style={styles.btn}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.linkHolder}>
-        <Text style={styles.signup} onPress={() =>
-          props.navigation.navigate('SignUp')
-        }>Click to Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.linkHolder}>
+          <Text style={styles.signup}>Forgot Password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.linkHolder}>
+          <Text 
+            style={styles.signup} 
+            onPress={() => props.navigation.navigate('SignUp')}>
+            Click to Sign Up
+          </Text>
+        </TouchableOpacity>
+      </View>
+      )}
+    </StateContext.Consumer>
   );
 
   // _onPressLogout() {
