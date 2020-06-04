@@ -11,8 +11,8 @@ import {
 import { StateContext } from './StateProvider';
 
 const Login = (props) => {
-  const [email, onChangeEmail] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const title = 'Waterly';
   const emailLabel = 'Email: ';
   const passwordLabel = 'Password: ';
@@ -21,7 +21,12 @@ const Login = (props) => {
     const credential = new UserPasswordCredential(email, password)
       client.auth.loginWithCredential(credential)
       // Returns a promise that resolves to the authenticated user
-      .then(authedUser => console.log(`successfully logged in with id: ${authedUser.id}`))
+      .then(authedUser => {
+        console.log(`successfully logged in with id: ${authedUser.id}`)
+        setEmail('');
+        setPassword('');
+        props.navigation.navigate('Home')
+      })
       .catch(err => console.error(`login failed with error: ${err}`))
   };
 
@@ -33,7 +38,7 @@ const Login = (props) => {
         <View style={styles.formRow}>
           <Text style={styles.label}> {emailLabel} </Text>
           <TextInput
-            onChangeText={text => onChangeEmail(text)}
+            onChangeText={text => setEmail(text)}
             value={email}
             style={styles.input}
           />
@@ -41,7 +46,7 @@ const Login = (props) => {
         <View style={styles.formRow}>
           <Text style={styles.label}> {passwordLabel} </Text>
           <TextInput
-            onChangeText={text => onChangePassword(text)}
+            onChangeText={text => setPassword(text)}
             value={password}
             style={styles.input}
           />
@@ -55,7 +60,11 @@ const Login = (props) => {
         <TouchableOpacity style={styles.linkHolder}>
           <Text 
             style={styles.signup} 
-            onPress={() => props.navigation.navigate('SignUp')}>
+            onPress={() => {
+              props.navigation.navigate('SignUp')
+              setEmail('');
+              setPassword('')
+            }}>
             Click to Sign Up
           </Text>
         </TouchableOpacity>

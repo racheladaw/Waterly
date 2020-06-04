@@ -11,10 +11,10 @@ import {
 import { StateContext } from './StateProvider';
 
 const SignUp = (props) => {
-  const [name, onChangeName] = React.useState('');
-  const [email, onChangeEmail] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
-  const [confirmPassword, onChangeConfirmPassword] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
   const title = 'Waterly';
   const nameLabel = 'Name: ';
   const emailLabel = 'Email: ';
@@ -27,7 +27,14 @@ const SignUp = (props) => {
 
     if(password === confirmPassword) {
         emailPasswordClient.registerWithEmail(email, password)
-            .then(() => console.log("Successfully sent account confirmation email!"))
+            .then(() => {
+              console.log("Successfully sent account confirmation email!")
+              setName('')
+              setEmail('')
+              setPassword('')
+              setConfirmPassword('')
+              props.navigation.navigate('Login')
+            })
             .catch(err => console.error("Error registering new user:", err));
     }
     else {
@@ -43,7 +50,7 @@ const SignUp = (props) => {
           <View style={styles.formRow}>
             <Text style={styles.label}> {nameLabel} </Text>
             <TextInput
-              onChangeText={text => onChangeName(text)}
+              onChangeText={text => setName(text)}
               value={name}
               style={styles.input}
             />
@@ -51,7 +58,7 @@ const SignUp = (props) => {
           <View style={styles.formRow}>
             <Text style={styles.label}> {emailLabel} </Text>
             <TextInput
-              onChangeText={text => onChangeEmail(text)}
+              onChangeText={text => setEmail(text)}
               value={email}
               style={styles.input}
             />
@@ -59,7 +66,7 @@ const SignUp = (props) => {
           <View style={styles.formRow}>
             <Text style={styles.label}> {passwordLabel} </Text>
             <TextInput
-              onChangeText={text => onChangePassword(text)}
+              onChangeText={text => setPassword(text)}
               value={password}
               style={styles.input}
             />
@@ -67,7 +74,7 @@ const SignUp = (props) => {
           <View style={styles.formRow}>
             <Text style={styles.label}> {confirmLabel} </Text>
             <TextInput
-              onChangeText={text => onChangeConfirmPassword(text)}
+              onChangeText={text => setConfirmPassword(text)}
               value={confirmPassword}
               style={styles.input}
             />
@@ -78,7 +85,13 @@ const SignUp = (props) => {
           <TouchableOpacity style={styles.linkHolder}>
             <Text 
               style={styles.signup} 
-              onPress={() => props.navigation.navigate('Login')}>
+              onPress={() => {
+                props.navigation.navigate('Login')
+                setName('')
+                setEmail('')
+                setPassword('')
+                setConfirmPassword('')
+              }}>
                 Or login?
             </Text>
           </TouchableOpacity>
