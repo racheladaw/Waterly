@@ -3,8 +3,9 @@ import {View, StyleSheet, ScrollView, Text} from 'react-native';
 import {v4 as uuid} from 'uuid';
 
 import ListItem from './ListItem';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Home = () => {
+const Home = (props) => {
   const [items, setItems] = useState([
     {
       id: uuid(),
@@ -49,24 +50,48 @@ const Home = () => {
   ]);
 
   return (
-    <ScrollView contentContainerStyle={styles.imgGalleryContainer}>
-      {items.map((item, index) => (
-        <View style={styles.itemGallery}>
-          <ListItem item={item} />
-        </View>
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.btnContainer}>
+        <Text style={styles.waterPlantsBtn}>Water Plants</Text>
+        <Text style={styles.addPlantBtn} onPress={() => props.navigation.navigate('Add Plant')}>+</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.imgGalleryContainer}>
+        {items.map((item, index) => (
+          <TouchableOpacity 
+            style={styles.itemGallery} 
+            onPress={() => props.navigation.navigate('Edit Plant')}
+          >
+            <ListItem item={item}/>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  text: {
-    color: 'green',
-    fontSize: 23,
-    textAlign: 'center',
+  container: {
+    flexDirection: 'column',
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 10,
+    alignItems: 'center',
+  },
+  waterPlantsBtn: {
+    borderColor: 'blue',
+    color: 'blue',
+    borderWidth: 2,
+    height: 30,
+    padding: 5,
+  },
+  addPlantBtn: {
+    fontSize: 40,
+    marginRight: 10,
+    paddingBottom: 5,
   },
   imgGalleryContainer: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',

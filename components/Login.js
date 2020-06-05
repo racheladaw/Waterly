@@ -51,8 +51,11 @@ const Login = (props) => {
             style={styles.input}
           />
         </View>
-        <TouchableOpacity onPress={() => {onPressLogin(context.state.client)}} style={styles.btnHolder}>
-        <Text style={styles.btn}>Login</Text>
+        <TouchableOpacity 
+          style={styles.btnHolder}
+          onPress={() => {onPressLogin(context.state.client)}} 
+        >
+          <Text style={styles.btn}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.linkHolder}>
           <Text style={styles.signup}>Forgot Password?</Text>
@@ -61,7 +64,7 @@ const Login = (props) => {
           <Text 
             style={styles.signup} 
             onPress={() => {
-              props.navigation.navigate('SignUp')
+              props.navigation.navigate('Sign Up')
               setEmail('');
               setPassword('')
             }}>
